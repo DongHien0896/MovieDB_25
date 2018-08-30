@@ -20,26 +20,23 @@ public class HomeSliderPagerFragment extends BaseFragment {
     private static final String ARGUMENT_PAGE = "ARG_PAGE";
     private static final int IMAGE_SCALE_HEIGHT = 300;
     private static final int IMAGE_SCALE_WIDTH = 600;
-    private static final int IMAGE_SLIDER = 1;
-    private static final int IMAGE_SLIDER_1 = 2;
-    private static final int IMAGE_SLIDER_2 = 3;
+    private static final int IMAGE_SLIDER = 0;
+    private static final int IMAGE_SLIDER_1 = 1;
+    private static final int IMAGE_SLIDER_2 = 2;
 
     private int mPage;
     private FragmentItemSliderPagerBinding mBinding;
-    private static HomeSliderPagerFragment sInstance;
 
     public HomeSliderPagerFragment() {
 
     }
 
     public static HomeSliderPagerFragment getInstance(int page) {
-        if (sInstance == null) {
-            sInstance = new HomeSliderPagerFragment();
-        }
+        HomeSliderPagerFragment fragment = new HomeSliderPagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARGUMENT_PAGE, page);
-        sInstance.setArguments(args);
-        return sInstance;
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Nullable
