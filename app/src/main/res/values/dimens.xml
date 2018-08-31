@@ -14,4 +14,6 @@
     <dimen name="dp_368">368dp</dimen>
     <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="sp_23">23sp</dimen>
 </resources>
