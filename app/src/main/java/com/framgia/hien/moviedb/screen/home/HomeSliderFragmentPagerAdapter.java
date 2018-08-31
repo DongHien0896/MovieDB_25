@@ -3,10 +3,11 @@ package com.framgia.hien.moviedb.screen.home;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class HomeSliderFragmentPagerAdapter extends FragmentPagerAdapter {
+import com.framgia.hien.moviedb.util.Constants;
 
-    public static final int HOME_SLIDER_TOTAL_PAGE = 5;
+public class HomeSliderFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     public HomeSliderFragmentPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -14,11 +15,11 @@ public class HomeSliderFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return HomeSliderPagerFragment.getInstance(++position);
+        return HomeSliderPagerFragment.getInstance(position);
     }
 
     @Override
     public int getCount() {
-        return HOME_SLIDER_TOTAL_PAGE;
+        return Constants.HOME_SLIDER_TOTAL_PAGE;
     }
 }

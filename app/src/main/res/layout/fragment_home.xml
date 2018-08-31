@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="binding"
-            type="com.framgia.hien.moviedb.screen.home.HomeFragment"/>
+            type="com.framgia.hien.moviedb.screen.home.HomeFragment" />
+
+        <variable
+            name="fragmentViewModel"
+            type="com.framgia.hien.moviedb.screen.home.HomeFragmentViewModel" />
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -28,7 +34,8 @@
                     android:id="@+id/viewpager_slider"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_200"
-                    android:background="@color/color_red" />
+                    android:background="@color/color_red"
+                    bind:setPagerAdapter="@{fragmentViewModel.homeSlideAdapter}" />
 
                 <android.support.design.widget.TabLayout
                     android:id="@+id/tablayout_slider"
@@ -38,64 +45,52 @@
                     app:tabBackground="@drawable/slider_tab_selector"
                     app:tabGravity="center"
                     app:tabIndicatorHeight="@dimen/dp_0" />
-
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_genres"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_64"
-                android:paddingBottom="@dimen/dp_2"
-                android:paddingTop="@dimen/dp_16"
+            <Button
+                android:id="@+id/button_genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tittle_genres"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/slider_wrapper" />
 
-            <FrameLayout
-                android:id="@+id/list_top_genre_popular"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_most_popular"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/tittle_most_popular"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.077"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recycler_genres" />
-
-            <FrameLayout
-                android:id="@+id/list_top_now_playing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/list_top_genre_popular" />
-
-            <FrameLayout
-                android:id="@+id/list_top_upcoming"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/list_top_now_playing" />
-
-            <FrameLayout
-                android:id="@+id/list_top_top_rate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_8"
-                android:layout_marginTop="@dimen/dp_4"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/list_top_upcoming" />
+                app:layout_constraintTop_toBottomOf="@+id/button_genres" />
 
             <ProgressBar
                 android:id="@+id/progress_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_120"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_movies"
+                android:layout_width="@dimen/dp_368"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:layout_marginLeft="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_8"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginTop="@dimen/dp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_most_popular"></android.support.v7.widget.RecyclerView>
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>

@@ -3,4 +3,6 @@
     <string name="title_home">Home</string>
     <string name="title_favorite">Favorite</string>
     <string name="title_setting">Setting</string>
+    <string name="tittle_genres">Genres</string>
+    <string name="tittle_most_popular">Most popular</string>
 </resources>
