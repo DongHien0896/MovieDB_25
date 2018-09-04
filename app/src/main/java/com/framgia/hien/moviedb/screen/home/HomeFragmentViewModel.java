@@ -1,6 +1,9 @@
 package com.framgia.hien.moviedb.screen.home;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -11,6 +14,7 @@ import com.example.dong.moviedb.BuildConfig;
 import com.framgia.hien.moviedb.data.model.Movie;
 import com.framgia.hien.moviedb.data.repository.MovieRepository;
 import com.framgia.hien.moviedb.screen.BaseViewModel;
+import com.framgia.hien.moviedb.screen.detail.DetailActivity;
 import com.framgia.hien.moviedb.util.Constants;
 import com.framgia.hien.moviedb.util.rx.BaseScheduleProvider;
 
@@ -20,7 +24,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-public class HomeFragmentViewModel extends BaseViewModel {
+public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter.ItemClickListener {
 
     public ObservableField<HomeSliderFragmentPagerAdapter> homeSlideAdapter = new ObservableField<>();
     private static final int SLIDER_INTERVAL_TIMEOUT = 5500;
@@ -33,19 +37,44 @@ public class HomeFragmentViewModel extends BaseViewModel {
     private BaseScheduleProvider mBaseScheduleProvider;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
-    private MovieAdapter mMovieAdapter;
+    private MovieAdapter mMoviePopularAdapter;
+    private MovieAdapter mMovieNowPlayingAdaper;
+    private MovieAdapter mMovieUpcomingAdapter;
+    private MovieAdapter mMovieTopRatedAdapter;
+    private Context mContext;
 
-    public HomeFragmentViewModel(FragmentManager fragmentManager, MovieRepository movieRepository) {
+    public HomeFragmentViewModel(FragmentManager fragmentManager, MovieRepository movieRepository, Context context) {
         homeSlideAdapter.set(new HomeSliderFragmentPagerAdapter(fragmentManager));
         this.mMovieRepository = movieRepository;
+        this.mContext = context;
+        mMoviePopularAdapter = new MovieAdapter();
+        mMovieNowPlayingAdaper = new MovieAdapter();
+        mMovieUpcomingAdapter = new MovieAdapter();
+        mMovieTopRatedAdapter = new MovieAdapter();
+        mMoviePopularAdapter.setItemClickListener(this);
+        mMovieNowPlayingAdaper.setItemClickListener(this);
+        mMovieUpcomingAdapter.setItemClickListener(this);
+        mMovieTopRatedAdapter.setItemClickListener(this);
     }
 
     public void setProgressBar(ProgressBar progressBar) {
         this.mProgressBar = progressBar;
     }
 
-    public MovieAdapter getMovieAdapter(){
-        return mMovieAdapter;
+    public MovieAdapter getMoviePopularAdapter() {
+        return mMoviePopularAdapter;
+    }
+
+    public MovieAdapter getMovieNowPlayingAdapter() {
+        return mMovieNowPlayingAdaper;
+    }
+
+    public MovieAdapter getMovieUpcomingAdapter() {
+        return mMovieUpcomingAdapter;
+    }
+
+    public MovieAdapter getMovieTopRatedAdapter() {
+        return mMovieTopRatedAdapter;
     }
 
     public void setSchedulerProvider(BaseScheduleProvider baseScheduleProvider) {
@@ -54,7 +83,15 @@ public class HomeFragmentViewModel extends BaseViewModel {
 
     private void requestGetMovies() {
         mProgressBar.setVisibility(View.VISIBLE);
-        Disposable disposable = mMovieRepository.getAllMovie(BuildConfig.API_KEY.toString(), Constants.PAGE_REQUEST)
+        getMovies(Constants.TYPE_POPULAR, mMoviePopularAdapter);
+        getMovies(Constants.TYPE_NOW_PLAYING, mMovieNowPlayingAdaper);
+        getMovies(Constants.TYPE_UPCOMING, mMovieUpcomingAdapter);
+        getMovies(Constants.TYPE_TOP_RATED, mMovieTopRatedAdapter);
+    }
+
+    private void getMovies(String type, final MovieAdapter adapter) {
+        Disposable disposable = mMovieRepository.getAllMovieByType(BuildConfig.API_KEY.toString()
+                , Constants.PAGE_REQUEST, type)
                 .subscribeOn(mBaseScheduleProvider.io())
                 .observeOn(mBaseScheduleProvider.ui())
                 .subscribe(new Consumer<List<Movie>>() {
@@ -62,7 +99,7 @@ public class HomeFragmentViewModel extends BaseViewModel {
                     public void accept(List<Movie> movies) throws Exception {
                         mProgressBar.setVisibility(View.GONE);
                         // set adapter for recyclerView.
-                        mMovieAdapter = new MovieAdapter(movies);
+                        adapter.setMovies(movies);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -102,5 +139,17 @@ public class HomeFragmentViewModel extends BaseViewModel {
     @Override
     protected void onStop() {
         mCompositeDisposable.clear();
+    }
+
+    @Override
+    public void onItemClicked(Integer movieId) {
+        if (movieId == null) {
+            return;
+        }
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.ARGUMENT_MOVIE_ID, movieId);
+        Intent intent = new Intent(mContext, DetailActivity.class);
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
     }
 }
