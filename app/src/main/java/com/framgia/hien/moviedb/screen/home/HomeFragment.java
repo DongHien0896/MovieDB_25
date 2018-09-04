@@ -42,7 +42,7 @@ public class HomeFragment extends BaseFragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         mBinding.setBinding(this);
         MovieRepository repository = MovieRepository.getInstance(MovieRemoteDataSource.getInstance());
-        mViewModel = new HomeFragmentViewModel(getActivity().getSupportFragmentManager(), repository);
+        mViewModel = new HomeFragmentViewModel(getActivity().getSupportFragmentManager(), repository, getContext());
         mViewModel.setSchedulerProvider(ScheduleProvider.getInstance());
         mBinding.setFragmentViewModel(mViewModel);
         return mBinding.getRoot();

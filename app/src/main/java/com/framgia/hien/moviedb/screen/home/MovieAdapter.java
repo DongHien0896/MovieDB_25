@@ -18,9 +18,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemViewHold
     private List<Movie> mMovies;
     private ItemClickListener mItemClick;
 
-    public MovieAdapter(List<Movie> movies) {
+    public MovieAdapter() {
         mMovies = new ArrayList<>();
-        mMovies.addAll(movies);
     }
 
     @NonNull
@@ -45,9 +44,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemViewHold
         mItemClick = itemClickListener;
     }
 
-    public void setUsers(List<Movie> users) {
+    public void setMovies(List<Movie> movies) {
         mMovies.clear();
-        mMovies.addAll(users);
+        mMovies.addAll(movies);
         notifyDataSetChanged();
     }
 

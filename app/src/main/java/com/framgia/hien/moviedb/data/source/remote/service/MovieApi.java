@@ -12,4 +12,14 @@ public interface MovieApi {
 
     @GET("movie/popular")
     Single<MovieResponse> getMoviePopular(@Query("api_key") String key, @Query("page") int pageNumber);
+
+    @GET("movie/now_playing")
+    Single<MovieResponse> getMovieNowPlaying(@Query("api_key") String key, @Query("page") int pageNumber);
+
+    @GET("movie/upcoming")
+    Single<MovieResponse> getMovieUpcoming(@Query("api_key") String key, @Query("page") int pageNumber);
+
+    @GET("movie/top_rated")
+    Single<MovieResponse> getMovieTopRated(@Query("api_key") String key, @Query("page") int pageNumber);
 }
+
