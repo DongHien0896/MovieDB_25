@@ -11,7 +11,9 @@ import android.widget.ProgressBar;
 
 import com.example.dong.moviedb.R;
 import com.example.dong.moviedb.databinding.FragmentHomeBinding;
+import com.framgia.hien.moviedb.data.repository.GenreRepository;
 import com.framgia.hien.moviedb.data.repository.MovieRepository;
+import com.framgia.hien.moviedb.data.source.remote.GenreRemoteDataSource;
 import com.framgia.hien.moviedb.data.source.remote.MovieRemoteDataSource;
 import com.framgia.hien.moviedb.screen.BaseFragment;
 import com.framgia.hien.moviedb.util.rx.BaseScheduleProvider;
@@ -42,7 +44,9 @@ public class HomeFragment extends BaseFragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         mBinding.setBinding(this);
         MovieRepository repository = MovieRepository.getInstance(MovieRemoteDataSource.getInstance());
-        mViewModel = new HomeFragmentViewModel(getActivity().getSupportFragmentManager(), repository, getContext());
+        GenreRepository genreRepository = GenreRepository.getsInstance(GenreRemoteDataSource.getInstance());
+        mViewModel = new HomeFragmentViewModel(getActivity().getSupportFragmentManager(), repository
+                , genreRepository, getContext());
         mViewModel.setSchedulerProvider(ScheduleProvider.getInstance());
         mBinding.setFragmentViewModel(mViewModel);
         return mBinding.getRoot();
