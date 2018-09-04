@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.dong.moviedb.BuildConfig;
+import com.framgia.hien.moviedb.data.model.Genre;
 import com.framgia.hien.moviedb.data.model.Movie;
+import com.framgia.hien.moviedb.data.repository.GenreRepository;
 import com.framgia.hien.moviedb.data.repository.MovieRepository;
 import com.framgia.hien.moviedb.screen.BaseViewModel;
 import com.framgia.hien.moviedb.screen.detail.DetailActivity;
@@ -24,7 +26,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter.ItemClickListener {
+public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter.ItemClickListener, GenresAdapter.ItemClickListener {
 
     public ObservableField<HomeSliderFragmentPagerAdapter> homeSlideAdapter = new ObservableField<>();
     private static final int SLIDER_INTERVAL_TIMEOUT = 5500;
@@ -41,20 +43,26 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
     private MovieAdapter mMovieNowPlayingAdaper;
     private MovieAdapter mMovieUpcomingAdapter;
     private MovieAdapter mMovieTopRatedAdapter;
+    private GenresAdapter mGenreAdapter;
     private Context mContext;
+    private GenreRepository mGenreRepository;
 
-    public HomeFragmentViewModel(FragmentManager fragmentManager, MovieRepository movieRepository, Context context) {
+    public HomeFragmentViewModel(FragmentManager fragmentManager, MovieRepository movieRepository,
+                                 GenreRepository genreRepository, Context context) {
         homeSlideAdapter.set(new HomeSliderFragmentPagerAdapter(fragmentManager));
         this.mMovieRepository = movieRepository;
+        this.mGenreRepository = genreRepository;
         this.mContext = context;
         mMoviePopularAdapter = new MovieAdapter();
         mMovieNowPlayingAdaper = new MovieAdapter();
         mMovieUpcomingAdapter = new MovieAdapter();
         mMovieTopRatedAdapter = new MovieAdapter();
+        mGenreAdapter = new GenresAdapter();
         mMoviePopularAdapter.setItemClickListener(this);
         mMovieNowPlayingAdaper.setItemClickListener(this);
         mMovieUpcomingAdapter.setItemClickListener(this);
         mMovieTopRatedAdapter.setItemClickListener(this);
+        mGenreAdapter.setItemClickListener(this);
     }
 
     public void setProgressBar(ProgressBar progressBar) {
@@ -75,6 +83,10 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
 
     public MovieAdapter getMovieTopRatedAdapter() {
         return mMovieTopRatedAdapter;
+    }
+
+    public GenresAdapter getGenreAdapter(){
+        return mGenreAdapter;
     }
 
     public void setSchedulerProvider(BaseScheduleProvider baseScheduleProvider) {
@@ -111,6 +123,24 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
         mCompositeDisposable.add(disposable);
     }
 
+    private void getGenres(){
+        Disposable disposable = mGenreRepository.getGenres(BuildConfig.API_KEY.toString())
+                .subscribeOn(mBaseScheduleProvider.io())
+                .observeOn(mBaseScheduleProvider.ui())
+                .subscribe(new Consumer<List<Genre>>() {
+                    @Override
+                    public void accept(List<Genre> genres) throws Exception {
+                        mGenreAdapter.setGenres(genres);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        // show error
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
     public void startSliderInterval(final ViewPager pager) {
         mSliderRunnable = new Runnable() {
             @Override
@@ -134,6 +164,7 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
     @Override
     protected void onStart() {
         requestGetMovies();
+        getGenres();
     }
 
     @Override
@@ -151,5 +182,10 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
         Intent intent = new Intent(mContext, DetailActivity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
+    }
+
+    @Override
+    public void onItemGenreClicked(Integer genreId) {
+
     }
 }

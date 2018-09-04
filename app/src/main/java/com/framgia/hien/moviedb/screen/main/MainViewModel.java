@@ -1,7 +1,6 @@
 package com.framgia.hien.moviedb.screen.main;
 
 import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,8 +21,6 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
 
     public MainViewModel(AppCompatActivity appCompatActivity) {
         mFragmentManager = appCompatActivity.getSupportFragmentManager();
-        mHomeFragment = HomeFragment.getsInstance();
-        mFavoriteFragment = FavoriteFragment.getsInstance();
         createFragment();
     }
 
@@ -44,19 +41,26 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
                 hideShowFragment(mFragment, mHomeFragment);
                 mFragment = mHomeFragment;
                 return true;
-            case R.id.navigation_dashboard:
+            case R.id.navigation_favorite:
                 hideShowFragment(mFragment, mFavoriteFragment);
                 mFragment = mFavoriteFragment;
                 return true;
-            case R.id.navigation_notifications:
+            case R.id.navigation_setting:
                 return true;
         }
         return false;
     }
 
     private void createFragment() {
-        mFragmentManager.beginTransaction().replace(R.id.frame_container, mHomeFragment).commit();
+        mHomeFragment = HomeFragment.getsInstance();
+        mFavoriteFragment = FavoriteFragment.getsInstance();
+        addHideFragment(mFavoriteFragment);
+        mFragmentManager.beginTransaction().add(R.id.frame_container, mHomeFragment).commit();
         mFragment = mHomeFragment;
+    }
+
+    private void addHideFragment(Fragment fragment) {
+        mFragmentManager.beginTransaction().add(R.id.frame_container, fragment).hide(fragment).commit();
     }
 
     private void hideShowFragment(Fragment hide, Fragment show) {

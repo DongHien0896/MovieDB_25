@@ -57,15 +57,36 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/button_genres"
+            <TextView
+                android:id="@+id/text_genres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tittle_genres"
                 android:textAllCaps="false"
+                android:textColor="@color/color_dark"
+                android:textSize="@dimen/dp_20"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/slider_wrapper" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_genre"
+                android:layout_width="@dimen/dp_368"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:layout_marginLeft="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_8"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginTop="@dimen/dp_12"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:recyclerAdapter="@{fragmentViewModel.genreAdapter}"
+                app:layout_constraintTop_toBottomOf="@+id/text_genres" />
 
             <TextView
                 android:id="@+id/text_most_popular"
@@ -79,7 +100,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.077"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button_genres" />
+                app:layout_constraintTop_toBottomOf="@+id/recycler_genre" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_popular_movies"
