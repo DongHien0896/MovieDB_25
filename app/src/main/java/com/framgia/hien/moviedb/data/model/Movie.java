@@ -50,6 +50,9 @@ public class Movie implements Serializable {
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
+    @SerializedName("production_companies")
+    @Expose
+    private List<ProductionCompany> productionCompanies = null;
 
     public Integer getVoteCount() {
         return voteCount;
@@ -161,5 +164,13 @@ public class Movie implements Serializable {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public List<ProductionCompany> getProductionCompanies() {
+        return productionCompanies;
+    }
+
+    public void setProductionCompanies(List<ProductionCompany> productionCompanies) {
+        this.productionCompanies = productionCompanies;
     }
 }
