@@ -8,4 +8,11 @@
     <string name="tittle_now_playing">Now playing</string>
     <string name="tittle_upcoming">Upcoming</string>
     <string name="tittle_top_rated">Top rated</string>
+    <string name="text_example">Example</string>
+    <string name="tittle_realease">Release date:</string>
+    <string name="tittle_rating">Rating: </string>
+    <string name="tittle_trailer">Trailer Offical</string>
+    <string name="tittle_casts">Casts</string>
+    <string name="tittle_production_companies">Production Companies</string>
+    <string name="message_dialog_no_internet">Please connect internet!</string>
 </resources>

@@ -1,9 +1,12 @@
 package com.framgia.hien.moviedb.screen.main;
 
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -11,6 +14,7 @@ import com.example.dong.moviedb.R;
 import com.framgia.hien.moviedb.screen.BaseViewModel;
 import com.framgia.hien.moviedb.screen.favorite.FavoriteFragment;
 import com.framgia.hien.moviedb.screen.home.HomeFragment;
+import com.framgia.hien.moviedb.util.network.NetworkReceiver;
 
 public class MainViewModel extends BaseViewModel implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -18,20 +22,31 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
     private HomeFragment mHomeFragment;
     private FavoriteFragment mFavoriteFragment;
     private FragmentManager mFragmentManager;
+    private NetworkReceiver mNetworkReceiver;
+    private AppCompatActivity mAppCompatActivity;
 
     public MainViewModel(AppCompatActivity appCompatActivity) {
+        this.mAppCompatActivity = appCompatActivity;
         mFragmentManager = appCompatActivity.getSupportFragmentManager();
-        createFragment();
+        createComponent();
+        checkInternet();
     }
 
     @Override
     protected void onStart() {
-
+        if (mNetworkReceiver == null){
+            return;
+        }
+        mAppCompatActivity.registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager
+                .CONNECTIVITY_ACTION));
     }
 
     @Override
     protected void onStop() {
-
+        if (mNetworkReceiver == null){
+            return;
+        }
+        mAppCompatActivity.unregisterReceiver(mNetworkReceiver);
     }
 
     @Override
@@ -51,7 +66,7 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
         return false;
     }
 
-    private void createFragment() {
+    private void createComponent() {
         mHomeFragment = HomeFragment.getsInstance();
         mFavoriteFragment = FavoriteFragment.getsInstance();
         addHideFragment(mFavoriteFragment);
@@ -65,5 +80,34 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
 
     private void hideShowFragment(Fragment hide, Fragment show) {
         mFragmentManager.beginTransaction().hide(hide).show(show).commit();
+    }
+
+    public void initNetworkBroadcastReceiver(NetworkReceiver.NetworkStateListener listener) {
+        mNetworkReceiver = new NetworkReceiver(listener);
+    }
+
+    protected void showDialogNoInternet() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mAppCompatActivity.getApplicationContext());
+        builder.setTitle(mAppCompatActivity.getString(R.string.app_name));
+        builder.setMessage(mAppCompatActivity.getString(R.string.message_dialog_no_internet));
+        AlertDialog dialog = builder.create();
+        if (dialog.isShowing()) {
+            return;
+        }
+        dialog.show();
+    }
+
+    private void checkInternet() {
+        initNetworkBroadcastReceiver(new NetworkReceiver.NetworkStateListener() {
+            @Override
+            public void onNetworkConnected() {
+                createComponent();
+            }
+
+            @Override
+            public void onNetworkDisconnected() {
+                showDialogNoInternet();
+            }
+        });
     }
 }

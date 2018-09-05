@@ -4,15 +4,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
 import com.example.dong.moviedb.R;
 import com.example.dong.moviedb.databinding.ActivityMainBinding;
 import com.framgia.hien.moviedb.screen.BaseActivity;
-import com.framgia.hien.moviedb.screen.favorite.FavoriteFragment;
-import com.framgia.hien.moviedb.screen.home.HomeFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -36,5 +32,15 @@ public class MainActivity extends BaseActivity {
         binding.setMainViewModel(mViewModel);
         BottomNavigationView navigation = findViewById(R.id.navigation_bottom);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }
