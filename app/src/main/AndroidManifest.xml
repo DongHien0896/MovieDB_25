@@ -22,11 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name="com.framgia.hien.moviedb.screen.detail.DetailActivity" />
-
         <activity
             android:name="com.framgia.hien.moviedb.screen.main.MainActivity"
             android:label="@string/app_name" />
+        <activity android:name="com.framgia.hien.moviedb.screen.play.PlayActivity"/>
     </application>
 </manifest>
