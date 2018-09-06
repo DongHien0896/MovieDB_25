@@ -10,6 +10,7 @@ public class Constants {
     public static final String TYPE_UPCOMING = "upcoming";
     public static final String TYPE_TOP_RATED = "top rated";
     public static final String ARGUMENT_MOVIE_ID = "movie_id";
+    public static final int DEFAULT_VALUE = 0;
 
     private Constants() {
         // No-op

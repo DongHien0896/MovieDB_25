@@ -29,4 +29,9 @@ public class MovieRepository implements MovieDataSource.RemoteDataSource {
     public Maybe<List<Movie>> getAllMovieByType(String key, int page, String type) {
         return mRemoteDataSource.getAllMovieByType(key, page, type);
     }
+
+    @Override
+    public Maybe<Movie> getDetailMovie(int movieId, String key) {
+        return mRemoteDataSource.getDetailMovie(movieId, key);
+    }
 }

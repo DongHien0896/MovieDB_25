@@ -2,9 +2,10 @@
 <layout>
 
     <data>
+
         <variable
             name="viewModel"
-            type="com.framgia.hien.moviedb.screen.detail.DetailViewModel"/>
+            type="com.framgia.hien.moviedb.screen.detail.DetailViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -85,8 +86,8 @@
                     android:layout_height="@dimen/dp_48"
                     android:layout_marginTop="@dimen/dp_124"
                     android:scaleType="centerCrop"
-                    android:visibility="gone"
                     android:src="@drawable/ic_favorite_red_24dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.952"
                     app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +106,7 @@
                     android:focusable="true"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
-                    android:text="@string/title_favorite"
+                    android:text="@{viewModel.movieObservableField.originalTitle}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                     android:textColor="@color/color_dark"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -138,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_8"
                     android:layout_marginStart="@dimen/dp_8"
-                    android:text="@string/text_example"
+                    android:text="@{String.valueOf(viewModel.movieObservableField.voteCount)}"
                     app:layout_constraintStart_toEndOf="@+id/text_detail_rating"
                     app:layout_constraintTop_toTopOf="@+id/text_detail_rating" />
 
@@ -171,7 +172,7 @@
                     android:layout_marginLeft="@dimen/dp_8"
                     android:layout_marginStart="@dimen/dp_8"
                     android:layout_marginTop="@dimen/dp_8"
-                    android:text="@string/text_example"
+                    android:text="@{viewModel.movieObservableField.releaseDate}"
                     app:layout_constraintStart_toEndOf="@+id/text_detail_release"
                     app:layout_constraintTop_toBottomOf="@+id/text_detail_rating" />
 
@@ -184,7 +185,8 @@
                     android:layout_marginTop="@dimen/dp_16"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    android:text="@string/text_example"
+                    android:onClick="@{viewModel::onTextClicked}"
+                    android:text="@{viewModel.movieObservableField.overview}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -257,6 +259,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_8"
                     android:orientation="horizontal"
+                    app:recyclerAdapter="@{viewModel.companyAdapter}"
                     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -269,6 +272,7 @@
                     android:layout_marginLeft="@dimen/dp_16"
                     android:layout_marginStart="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_16"
+                    android:onClick="@{viewModel::onBackClicked}"
                     android:src="@drawable/ic_arrow_back_white_24dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/image_detail_backdrop" />
@@ -277,7 +281,7 @@
         </android.support.v4.widget.NestedScrollView>
 
         <ProgressBar
-            android:id="@+id/progress_indicator"
+            android:id="@+id/progress_detail_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_250"

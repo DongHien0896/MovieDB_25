@@ -27,15 +27,6 @@ public class ItemMovieViewModel extends BaseObservable {
         movieObservableField.set(movie);
     }
 
-    @BindingAdapter({"imageUrl"})
-    public static void loadUrl(ImageView image, String url) {
-        String path = Constants.END_POINT_IMAGE_URL.concat(url);
-        Glide.with(image.getContext())
-                .load(path)
-                .apply(new RequestOptions().placeholder(R.drawable.movie_detail_poster_sample))
-                .into(image);
-    }
-
     public void onItemClicked(View view){
         if (mItemClickListener == null || movieObservableField.get() == null){
             return;

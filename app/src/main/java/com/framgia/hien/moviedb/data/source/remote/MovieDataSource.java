@@ -9,6 +9,7 @@ import io.reactivex.Maybe;
 public interface MovieDataSource {
 
     Maybe<List<Movie>> getAllMovieByType(String key, int page, String type);
+    Maybe<Movie> getDetailMovie(int movieId, String key);
 
     interface RemoteDataSource extends MovieDataSource {
     }

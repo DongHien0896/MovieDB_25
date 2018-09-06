@@ -73,4 +73,16 @@ public class MovieRemoteDataSource implements MovieDataSource.RemoteDataSource {
         }
         return null;
     }
+
+    @Override
+    public Maybe<Movie> getDetailMovie(int movieId, String key) {
+        return mMovieApi.getDetailMovie(movieId, key)
+                .flatMap(new Function<Movie, SingleSource<? extends Movie>>() {
+                    @Override
+                    public SingleSource<? extends Movie> apply(Movie movie) throws Exception {
+                        return Single.just(movie);
+                    }
+                })
+                .toMaybe();
+    }
 }

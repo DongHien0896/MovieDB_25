@@ -1,11 +1,15 @@
 package com.framgia.hien.moviedb.data.source.remote.service;
 
+import com.framgia.hien.moviedb.data.model.CastResponse;
 import com.framgia.hien.moviedb.data.model.Genre;
 import com.framgia.hien.moviedb.data.model.GenresResponse;
+import com.framgia.hien.moviedb.data.model.Movie;
 import com.framgia.hien.moviedb.data.model.MovieResponse;
+import com.framgia.hien.moviedb.data.model.TrailerResponse;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MovieApi {
@@ -24,5 +28,14 @@ public interface MovieApi {
 
     @GET("genre/movie/list")
     Single<GenresResponse>  getGenres(@Query("api_key") String key);
+
+    @GET("movie/{movie_id}")
+    Single<Movie> getDetailMovie(@Path("movie_id") int id, @Query("api_key") String key);
+
+    @GET("movie/{movie_id}/credits")
+    Single<CastResponse> getCastOfMovie(@Path("movie_id") int id, @Query("api_key") String key);
+
+    @GET("movie/{movie_id}/videos")
+    Single<TrailerResponse> getTrailer(@Path("movie_id") int id, @Query("api_key") String key);
 }
 
