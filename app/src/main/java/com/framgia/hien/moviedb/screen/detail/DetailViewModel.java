@@ -7,60 +7,94 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.dong.moviedb.BuildConfig;
 import com.example.dong.moviedb.R;
 import com.framgia.hien.moviedb.data.model.Movie;
+import com.framgia.hien.moviedb.data.model.Cast;
+import com.framgia.hien.moviedb.data.model.Movie;
+import com.framgia.hien.moviedb.data.repository.CastRepository;
 import com.framgia.hien.moviedb.data.repository.MovieRepository;
 import com.framgia.hien.moviedb.screen.BaseViewModel;
 import com.framgia.hien.moviedb.util.Constants;
 import com.framgia.hien.moviedb.util.rx.BaseScheduleProvider;
 import com.framgia.hien.moviedb.util.rx.ScheduleProvider;
-
+import java.util.List;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-public class DetailViewModel extends BaseViewModel implements CompanyAdapter.ItemClickListener {
+public class DetailViewModel extends BaseViewModel implements CompanyAdapter.ItemClickListener, CastAdapter.ItemCastClickListener {
 
     private AppCompatActivity mActivity;
     private MovieRepository mMovieRepository;
+    private CastRepository mCastRepository;
     public ObservableField<Movie> movieObservableField = new ObservableField<>();
     private BaseScheduleProvider mBaseScheduleProvider;
     private CompositeDisposable mCompositeDisposable;
     private int mMovieId;
     private ProgressBar mProgressBar;
-    private ImageClick mImageClick;
+    private BackPressListener mBackPress;
     private boolean mIsTextOverviewExpanded;
     private TextView mTextOverview;
     private CompanyAdapter mCompanyAdapter;
+    private CastAdapter mCastAdapter;
+    private ImageView mImageBackDrop;
+    private ImageView mImageTrailer;
+    private ImageView mImageFavorite;
+    private ImageView mImageUnFavorite;
 
     public static final int OVEVERVIEW_MINLINE = 3;
     public static final int OVEVERVIEW_MAXLINE = 30;
 
-    public DetailViewModel(AppCompatActivity appCompatActivity, MovieRepository repository, int movieId
-            , ImageClick imageClick) {
+    public DetailViewModel(AppCompatActivity appCompatActivity, int movieId, BackPressListener backPressListener) {
         this.mActivity = appCompatActivity;
-        this.mMovieRepository = repository;
         this.mMovieId = movieId;
+        this.mBackPress = backPressListener;
         this.mBaseScheduleProvider = ScheduleProvider.getInstance();
+        setComponent();
+    }
+
+    private void setComponent() {
         mCompositeDisposable = new CompositeDisposable();
-        this.mImageClick = imageClick;
         mCompanyAdapter = new CompanyAdapter();
+        mCastAdapter = new CastAdapter();
+        mCastAdapter.setItemClickListener(this);
         mCompanyAdapter.setItemClickListener(this);
     }
 
-    public CompanyAdapter getCompanyAdapter(){
+    public void setImagView(ImageView imageBackDrop, ImageView imageTrailer) {
+        this.mImageBackDrop = imageBackDrop;
+        this.mImageTrailer = imageTrailer;
+    }
+
+    public void setFavoriteImage(ImageView imageFavorite, ImageView imageUnFavorite) {
+        this.mImageFavorite = imageFavorite;
+        this.mImageUnFavorite = imageUnFavorite;
+    }
+
+    public void setRepository(MovieRepository movieRepository, CastRepository castRepository) {
+        this.mMovieRepository = movieRepository;
+        this.mCastRepository = castRepository;
+    }
+
+    public CompanyAdapter getCompanyAdapter() {
         return mCompanyAdapter;
+    }
+
+    public CastAdapter getCastAdapter() {
+        return mCastAdapter;
     }
 
     public void setProgressBar(ProgressBar progressBar) {
         this.mProgressBar = progressBar;
     }
 
-    public void setTextView(TextView textView){
+
+    public void setTextView(TextView textView) {
         this.mTextOverview = textView;
     }
 
@@ -72,9 +106,28 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
                 .subscribe(new Consumer<Movie>() {
                     @Override
                     public void accept(Movie movie) throws Exception {
-                        mProgressBar.setVisibility(View.GONE);
                         movieObservableField.set(movie);
                         mCompanyAdapter.setCompanies(movie.getProductionCompanies());
+                        loadUrl(mImageBackDrop, movie.getBackdropPath());
+                        loadUrl(mImageTrailer, movie.getPosterPath());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                    }
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    public void getCast() {
+        Disposable disposable = mCastRepository.getCastOfMovie(mMovieId, BuildConfig.API_KEY.toString())
+                .subscribeOn(mBaseScheduleProvider.io())
+                .observeOn(mBaseScheduleProvider.ui())
+                .subscribe(new Consumer<List<Cast>>() {
+                    @Override
+                    public void accept(List<Cast> casts) throws Exception {
+                        mCastAdapter.setCast(casts);
+                        mProgressBar.setVisibility(View.GONE);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -85,8 +138,18 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
         mCompositeDisposable.add(disposable);
     }
 
+    public static void loadUrl(ImageView image, String url) {
+        String path = Constants.END_POINT_IMAGE_URL.concat(url);
+        Glide.with(image.getContext())
+                .load(path)
+                .apply(new RequestOptions().placeholder(R.drawable.movie_detail_poster_sample))
+                .into(image);
+    }
+
     @Override
     protected void onStart() {
+        getMovieDetail();
+        getCast();
     }
 
     @Override
@@ -94,11 +157,11 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
 
     }
 
-    public void onBackClicked(View view){
-        mImageClick.backPress();
+    public void onBackClicked(View view) {
+        mBackPress.backPress();
     }
 
-    public void onTextClicked(View view){
+    public void onTextClicked(View view) {
         if (mIsTextOverviewExpanded) {
             mTextOverview.setMaxLines(OVEVERVIEW_MINLINE);
         } else {
@@ -107,12 +170,33 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
         mIsTextOverviewExpanded = !mIsTextOverviewExpanded;
     }
 
-    @Override
-    public void onItemClick(int CompanyId) {
-
+    public void onTrailerClicked(View view) {
+        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
     }
 
-    interface ImageClick {
+    public void onFavoriteClicked(View view) {
+        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+        mImageUnFavorite.setVisibility(View.VISIBLE);
+        mImageFavorite.setVisibility(View.GONE);
+    }
+
+    public void onUnFavoriteClicked(View view) {
+        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+        mImageUnFavorite.setVisibility(View.GONE);
+        mImageFavorite.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onItemClick(int companyId) {
+        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onItemCastClick(int castId) {
+        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+    }
+
+    interface BackPressListener {
         void backPress();
     }
 }

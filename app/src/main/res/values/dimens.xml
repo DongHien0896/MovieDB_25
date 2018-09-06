@@ -23,4 +23,7 @@
     <dimen name="dp_180">180dp</dimen>
     <dimen name="dp_100">100dp</dimen>
     <dimen name="dp_28">28dp</dimen>
+    <dimen name="dp_96">96dp</dimen>
+    <dimen name="dp_50">50dp</dimen>
+    <dimen name="dp_212">212dp</dimen>
 </resources>

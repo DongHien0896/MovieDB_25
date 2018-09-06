@@ -2,7 +2,6 @@ package com.framgia.hien.moviedb.util.binding;
 
 import android.databinding.BindingAdapter;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
@@ -16,7 +15,7 @@ import com.framgia.hien.moviedb.util.Constants;
 public class Binding {
     @BindingAdapter({"onNavigationItemSelected"})
     public static void setBottomNavigationClick(BottomNavigationView bottomNavigationView,
-            BottomNavigationView.OnNavigationItemSelectedListener listener) {
+                                                BottomNavigationView.OnNavigationItemSelectedListener listener) {
         bottomNavigationView.setOnNavigationItemSelectedListener(listener);
     }
 
@@ -25,7 +24,7 @@ public class Binding {
         viewPager.setAdapter(adapter);
     }
 
-    @BindingAdapter({ "recyclerAdapter" })
+    @BindingAdapter({"recyclerAdapter"})
     public static void setAdapterForRecyclerView(RecyclerView recyclerView,
                                                  RecyclerView.Adapter adapter) {
         recyclerView.setAdapter(adapter);
@@ -33,6 +32,9 @@ public class Binding {
 
     @BindingAdapter({"imageUrl"})
     public static void loadUrl(ImageView image, String url) {
+        if (url == null) {
+            url = Constants.EXAMPLE_URL;
+        }
         String path = Constants.END_POINT_IMAGE_URL.concat(url);
         Glide.with(image.getContext())
                 .load(path)

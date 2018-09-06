@@ -11,6 +11,7 @@ public class Constants {
     public static final String TYPE_TOP_RATED = "top rated";
     public static final String ARGUMENT_MOVIE_ID = "movie_id";
     public static final int DEFAULT_VALUE = 0;
+    public static final String EXAMPLE_URL = "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
 
     private Constants() {
         // No-op
