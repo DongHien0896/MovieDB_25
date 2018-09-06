@@ -15,4 +15,5 @@
     <string name="tittle_casts">Casts</string>
     <string name="tittle_production_companies">Production Companies</string>
     <string name="message_dialog_no_internet">Please connect internet!</string>
+    <string name="tittle_more_trailer">More Trailer</string>
 </resources>

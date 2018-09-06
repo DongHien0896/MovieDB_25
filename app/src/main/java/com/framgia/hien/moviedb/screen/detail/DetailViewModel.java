@@ -1,7 +1,9 @@
 package com.framgia.hien.moviedb.screen.detail;
 
+import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +21,7 @@ import com.framgia.hien.moviedb.data.model.Movie;
 import com.framgia.hien.moviedb.data.repository.CastRepository;
 import com.framgia.hien.moviedb.data.repository.MovieRepository;
 import com.framgia.hien.moviedb.screen.BaseViewModel;
+import com.framgia.hien.moviedb.screen.play.PlayActivity;
 import com.framgia.hien.moviedb.util.Constants;
 import com.framgia.hien.moviedb.util.rx.BaseScheduleProvider;
 import com.framgia.hien.moviedb.util.rx.ScheduleProvider;
@@ -54,11 +57,11 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
         this.mActivity = appCompatActivity;
         this.mMovieId = movieId;
         this.mBackPress = backPressListener;
-        this.mBaseScheduleProvider = ScheduleProvider.getInstance();
         setComponent();
     }
 
     private void setComponent() {
+        this.mBaseScheduleProvider = ScheduleProvider.getInstance();
         mCompositeDisposable = new CompositeDisposable();
         mCompanyAdapter = new CompanyAdapter();
         mCastAdapter = new CastAdapter();
@@ -171,7 +174,14 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
     }
 
     public void onTrailerClicked(View view) {
-        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+        Movie movie = movieObservableField.get();
+        if (movie == null){
+            Toast.makeText(mActivity.getApplicationContext(), Constants.MESSAGE_ERROR_PLAY_TRAILER, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Intent intent = new Intent(mActivity, PlayActivity.class);
+        intent.putExtra(Constants.MOVIE, movie);
+        mActivity.startActivity(intent);
     }
 
     public void onFavoriteClicked(View view) {
