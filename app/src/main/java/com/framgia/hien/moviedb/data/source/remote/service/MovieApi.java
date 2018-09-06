@@ -1,10 +1,11 @@
 package com.framgia.hien.moviedb.data.source.remote.service;
 
 import com.framgia.hien.moviedb.data.model.CastResponse;
-import com.framgia.hien.moviedb.data.model.Genre;
+import com.framgia.hien.moviedb.data.model.Company;
 import com.framgia.hien.moviedb.data.model.GenresResponse;
 import com.framgia.hien.moviedb.data.model.Movie;
 import com.framgia.hien.moviedb.data.model.MovieResponse;
+import com.framgia.hien.moviedb.data.model.Person;
 import com.framgia.hien.moviedb.data.model.TrailerResponse;
 
 import io.reactivex.Single;
@@ -27,7 +28,7 @@ public interface MovieApi {
     Single<MovieResponse> getMovieTopRated(@Query("api_key") String key, @Query("page") int pageNumber);
 
     @GET("genre/movie/list")
-    Single<GenresResponse>  getGenres(@Query("api_key") String key);
+    Single<GenresResponse> getGenres(@Query("api_key") String key);
 
     @GET("movie/{movie_id}")
     Single<Movie> getDetailMovie(@Path("movie_id") int id, @Query("api_key") String key);
@@ -37,5 +38,11 @@ public interface MovieApi {
 
     @GET("movie/{movie_id}/videos")
     Single<TrailerResponse> getTrailer(@Path("movie_id") int id, @Query("api_key") String key);
+
+    @GET("company/{company_id}")
+    Single<Company> getCompany(@Path("company_id") int companyId, @Query("api_key") String key);
+
+    @GET("person/{person_id}")
+    Single<Person> getPerson(@Path("person_id") int personId, @Query("api_key") String key);
 }
 

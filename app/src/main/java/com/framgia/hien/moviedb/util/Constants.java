@@ -14,6 +14,9 @@ public class Constants {
     public static final String EXAMPLE_URL = "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
     public static final String MOVIE = "movie";
     public static final String MESSAGE_ERROR_PLAY_TRAILER = "Trailer is not variable";
+    public static final String PERSON = "person";
+    public static final String COMPANY = "company";
+    public static final String LANGUAGE = "en-US";
 
     private Constants() {
         // No-op
