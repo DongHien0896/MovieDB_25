@@ -1,5 +1,6 @@
 package com.framgia.hien.moviedb.screen.detail;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
@@ -181,12 +182,11 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
             Toast.makeText(mActivity.getApplicationContext(), Constants.MESSAGE_ERROR_PLAY_TRAILER, Toast.LENGTH_LONG).show();
             return;
         }
-        mActivity.startActivity(getMovieIntent(movie));
+        mActivity.startActivity(getMovieIntent(mActivity.getApplicationContext(), movie));
     }
 
-    @NonNull
-    private Intent getMovieIntent(Movie movie) {
-        Intent intent = new Intent(mActivity, PlayActivity.class);
+    public static Intent getMovieIntent(Context context, Movie movie) {
+        Intent intent = new Intent(context, PlayActivity.class);
         intent.putExtra(Constants.MOVIE, movie);
         return intent;
     }
@@ -214,12 +214,11 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
             Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
             return;
         }
-        mActivity.startActivity(getCastIntent(castId));
+        mActivity.startActivity(getCastIntent(mActivity.getApplicationContext(), castId));
     }
 
-    @NonNull
-    private Intent getCastIntent(int castId) {
-        Intent intent = new Intent(mActivity, PersonActivity.class);
+    public static Intent getCastIntent(Context context, int castId) {
+        Intent intent = new Intent(context, PersonActivity.class);
         intent.putExtra(Constants.PERSON, castId);
         return intent;
     }

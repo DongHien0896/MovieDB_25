@@ -187,6 +187,7 @@
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:recyclerAdapter="@{viewModel.movieAdapter}"
                 app:layout_constraintTop_toBottomOf="@+id/text_person_related_movies" />
 
             <ProgressBar

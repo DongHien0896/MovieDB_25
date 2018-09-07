@@ -4,6 +4,7 @@ import com.framgia.hien.moviedb.data.model.CastResponse;
 import com.framgia.hien.moviedb.data.model.Company;
 import com.framgia.hien.moviedb.data.model.GenresResponse;
 import com.framgia.hien.moviedb.data.model.Movie;
+import com.framgia.hien.moviedb.data.model.MovieByPerson;
 import com.framgia.hien.moviedb.data.model.MovieResponse;
 import com.framgia.hien.moviedb.data.model.Person;
 import com.framgia.hien.moviedb.data.model.TrailerResponse;
@@ -44,5 +45,9 @@ public interface MovieApi {
 
     @GET("person/{person_id}")
     Single<Person> getPerson(@Path("person_id") int personId, @Query("api_key") String key);
+
+    @GET("search/person")
+    Single<MovieByPerson> getMovieByPerson(@Query("api_key") String key, @Query("language") String language
+            , @Query("query") String querry);
 }
 

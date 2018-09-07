@@ -1,6 +1,7 @@
 package com.framgia.hien.moviedb.data.repository;
 
 import com.framgia.hien.moviedb.data.model.Movie;
+import com.framgia.hien.moviedb.data.model.ResultMovie;
 import com.framgia.hien.moviedb.data.source.remote.MovieDataSource;
 import com.framgia.hien.moviedb.data.source.remote.MovieRemoteDataSource;
 
@@ -33,5 +34,10 @@ public class MovieRepository implements MovieDataSource.RemoteDataSource {
     @Override
     public Maybe<Movie> getDetailMovie(int movieId, String key) {
         return mRemoteDataSource.getDetailMovie(movieId, key);
+    }
+
+    @Override
+    public Maybe<List<ResultMovie>> getAllMovieByPerson(String key, String language, String query) {
+        return mRemoteDataSource.getAllMovieByPerson(key, language, query);
     }
 }

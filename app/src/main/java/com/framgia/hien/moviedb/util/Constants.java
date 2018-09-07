@@ -12,11 +12,12 @@ public class Constants {
     public static final String ARGUMENT_MOVIE_ID = "movie_id";
     public static final int DEFAULT_VALUE = 0;
     public static final String EXAMPLE_URL = "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
-    public static final String MOVIE = "movie";
+    public static final String MOVIE = "com.framgia.hien.moviedb.intent.movie";
     public static final String MESSAGE_ERROR_PLAY_TRAILER = "Trailer is not variable";
-    public static final String PERSON = "person";
-    public static final String COMPANY = "company";
+    public static final String PERSON = "com.framgia.hien.moviedb.intent.person";
+    public static final String COMPANY = "com.framgia.hien.moviedb.intent.company";
     public static final String LANGUAGE = "en-US";
+    public static final int VALUE_INTEGER_NULL = 1;
 
     private Constants() {
         // No-op
