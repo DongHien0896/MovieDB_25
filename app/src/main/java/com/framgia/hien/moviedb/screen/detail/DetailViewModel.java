@@ -1,9 +1,8 @@
 package com.framgia.hien.moviedb.screen.detail;
 
 import android.content.Intent;
-import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,23 +14,26 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.dong.moviedb.BuildConfig;
 import com.example.dong.moviedb.R;
-import com.framgia.hien.moviedb.data.model.Movie;
 import com.framgia.hien.moviedb.data.model.Cast;
 import com.framgia.hien.moviedb.data.model.Movie;
 import com.framgia.hien.moviedb.data.repository.CastRepository;
 import com.framgia.hien.moviedb.data.repository.MovieRepository;
 import com.framgia.hien.moviedb.screen.BaseViewModel;
+import com.framgia.hien.moviedb.screen.person.PersonActivity;
 import com.framgia.hien.moviedb.screen.play.PlayActivity;
 import com.framgia.hien.moviedb.util.Constants;
 import com.framgia.hien.moviedb.util.rx.BaseScheduleProvider;
 import com.framgia.hien.moviedb.util.rx.ScheduleProvider;
+
 import java.util.List;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 public class DetailViewModel extends BaseViewModel implements CompanyAdapter.ItemClickListener, CastAdapter.ItemCastClickListener {
 
+    private static final int DEFAULT_VALUE = -1;
     private AppCompatActivity mActivity;
     private MovieRepository mMovieRepository;
     private CastRepository mCastRepository;
@@ -175,13 +177,18 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
 
     public void onTrailerClicked(View view) {
         Movie movie = movieObservableField.get();
-        if (movie == null){
+        if (movie == null) {
             Toast.makeText(mActivity.getApplicationContext(), Constants.MESSAGE_ERROR_PLAY_TRAILER, Toast.LENGTH_LONG).show();
             return;
         }
+        mActivity.startActivity(getMovieIntent(movie));
+    }
+
+    @NonNull
+    private Intent getMovieIntent(Movie movie) {
         Intent intent = new Intent(mActivity, PlayActivity.class);
         intent.putExtra(Constants.MOVIE, movie);
-        mActivity.startActivity(intent);
+        return intent;
     }
 
     public void onFavoriteClicked(View view) {
@@ -203,7 +210,18 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
 
     @Override
     public void onItemCastClick(int castId) {
-        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+        if (castId == DEFAULT_VALUE) {
+            Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+            return;
+        }
+        mActivity.startActivity(getCastIntent(castId));
+    }
+
+    @NonNull
+    private Intent getCastIntent(int castId) {
+        Intent intent = new Intent(mActivity, PersonActivity.class);
+        intent.putExtra(Constants.PERSON, castId);
+        return intent;
     }
 
     interface BackPressListener {

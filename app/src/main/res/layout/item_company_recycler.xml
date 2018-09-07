@@ -18,9 +18,9 @@
 
         <ImageView
             android:id="@+id/image_company"
-            android:layout_width="@dimen/dp_120"
-            android:layout_height="@dimen/dp_150"
-            android:scaleType="centerCrop"
+            android:layout_width="@dimen/dp_240"
+            android:layout_height="@dimen/dp_140"
+            android:scaleType="fitXY"
             android:layout_marginEnd="@dimen/dp_8"
             android:layout_marginLeft="@dimen/dp_8"
             android:layout_marginRight="@dimen/dp_8"
@@ -35,13 +35,14 @@
 
         <TextView
             android:id="@+id/text_company_name"
-            android:layout_width="@dimen/dp_120"
+            android:layout_width="@dimen/dp_240"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_8"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_12"
             android:ellipsize="end"
             android:maxLines="1"
+            android:gravity="center"
             android:textColor="@color/color_dark"
             android:text="@{viewModel.observableField.name}"
             app:layout_constraintStart_toStartOf="parent"

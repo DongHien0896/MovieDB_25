@@ -8,9 +8,12 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.dong.moviedb.BuildConfig;
 import com.example.dong.moviedb.R;
 import com.framgia.hien.moviedb.screen.home.HomeSliderFragmentPagerAdapter;
 import com.framgia.hien.moviedb.util.Constants;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
 
 public class Binding {
     @BindingAdapter({"onNavigationItemSelected"})
@@ -40,5 +43,13 @@ public class Binding {
                 .load(path)
                 .apply(new RequestOptions().placeholder(R.drawable.movie_detail_poster_sample))
                 .into(image);
+    }
+
+    @BindingAdapter({"onYouTubeInitializedListener"})
+    public static void setOnYouTubeInitializedListener(YouTubePlayerView youTubeView,
+                                                       YouTubePlayer.OnInitializedListener listener) {
+        if (listener != null) {
+            youTubeView.initialize(BuildConfig.API_KEY_YOUTUBE, listener);
+        }
     }
 }

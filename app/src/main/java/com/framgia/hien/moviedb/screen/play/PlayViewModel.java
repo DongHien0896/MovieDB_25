@@ -1,21 +1,18 @@
 package com.framgia.hien.moviedb.screen.play;
 
-import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.dong.moviedb.BuildConfig;
 import com.framgia.hien.moviedb.data.model.Movie;
 import com.framgia.hien.moviedb.data.model.Trailer;
 import com.framgia.hien.moviedb.data.repository.TrailerRepository;
 import com.framgia.hien.moviedb.screen.BaseViewModel;
-import com.framgia.hien.moviedb.screen.main.MainActivity;
 import com.framgia.hien.moviedb.util.rx.BaseScheduleProvider;
 import com.framgia.hien.moviedb.util.rx.ScheduleProvider;
+import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +31,9 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
     private TrailerAdapter mTrailerAdapter;
     private ProgressBar mProgressBar;
 
-    private YouTubePlayerView mYouTubePlayerView;
-    private YouTubePlayer mYouTubePlayer;
-    private PlayerStateChangeListener mPlayerStateChangeListener;
     private List<String> mKeyVideos = new ArrayList<>();
+    public ObservableField<YouTubePlayer.OnInitializedListener> youtubeField;
+    private YouTubePlayer mYouTubePlayer;
 
     public PlayViewModel(Movie movie, InterfaceBackClickListener listener) {
         movieObservableField.set(movie);
@@ -50,6 +46,23 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
         mCompositeDisposable = new CompositeDisposable();
         mTrailerAdapter = new TrailerAdapter();
         mTrailerAdapter.setItemTrailerClick(this);
+        youtubeField = new ObservableField<>();
+    }
+
+    private void playvideo(final String key) {
+        youtubeField.set(new YouTubePlayer.OnInitializedListener() {
+            @Override
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+                youTubePlayer.loadVideo(key);
+                mYouTubePlayer = youTubePlayer;
+                mProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+
+            }
+        });
     }
 
     public void setTrailerRepository(TrailerRepository repository) {
@@ -91,10 +104,7 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
         for (Trailer trailer : trailers){
             mKeyVideos.add(trailer.getKey());
         }
-    }
-
-    protected YouTubePlayer.Provider getYouTubePlayerProvider() {
-        return mYouTubePlayerView;
+        playvideo(mKeyVideos.get(0));
     }
 
     public void onBackClicked(View view) {
@@ -102,8 +112,8 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
     }
 
     @Override
-    public void onItemTrailerClick(String trailerKey) {
-
+    public void onItemTrailerClick(final String trailerKey) {
+        mYouTubePlayer.loadVideo(trailerKey);
     }
 
     @Override
@@ -118,32 +128,5 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
 
     interface InterfaceBackClickListener {
         void onBackImageClick();
-    }
-
-    private final class PlayerStateChangeListener implements YouTubePlayer.PlayerStateChangeListener {
-        @Override
-        public void onLoading() {
-        }
-
-        @Override
-        public void onLoaded(String s) {
-            mYouTubePlayer.play();
-        }
-
-        @Override
-        public void onAdStarted() {
-        }
-
-        @Override
-        public void onVideoStarted() {
-        }
-
-        @Override
-        public void onVideoEnded() {
-        }
-
-        @Override
-        public void onError(YouTubePlayer.ErrorReason errorReason) {
-        }
     }
 }

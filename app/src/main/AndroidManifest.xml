@@ -26,6 +26,7 @@
         <activity
             android:name="com.framgia.hien.moviedb.screen.main.MainActivity"
             android:label="@string/app_name" />
-        <activity android:name="com.framgia.hien.moviedb.screen.play.PlayActivity"/>
+        <activity android:name="com.framgia.hien.moviedb.screen.play.PlayActivity" />
+        <activity android:name="com.framgia.hien.moviedb.screen.person.PersonActivity"/>
     </application>
 </manifest>
