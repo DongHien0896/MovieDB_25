@@ -3,7 +3,6 @@ package com.framgia.hien.moviedb.screen.detail;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +19,7 @@ import com.framgia.hien.moviedb.data.model.Movie;
 import com.framgia.hien.moviedb.data.repository.CastRepository;
 import com.framgia.hien.moviedb.data.repository.MovieRepository;
 import com.framgia.hien.moviedb.screen.BaseViewModel;
+import com.framgia.hien.moviedb.screen.company.CompanyActivity;
 import com.framgia.hien.moviedb.screen.person.PersonActivity;
 import com.framgia.hien.moviedb.screen.play.PlayActivity;
 import com.framgia.hien.moviedb.util.Constants;
@@ -205,13 +205,22 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
 
     @Override
     public void onItemClick(int companyId) {
-        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+        if (companyId == DEFAULT_VALUE) {
+            Toast.makeText(mActivity.getApplicationContext(), Constants.MESSAGE_ERROR, Toast.LENGTH_LONG).show();
+        }
+        mActivity.startActivity(getCompanyIntent(mActivity.getApplicationContext(), companyId));
+    }
+
+    public static Intent getCompanyIntent(Context context, int companyId) {
+        Intent intent = new Intent(context, CompanyActivity.class);
+        intent.putExtra(Constants.COMPANY, companyId);
+        return intent;
     }
 
     @Override
     public void onItemCastClick(int castId) {
         if (castId == DEFAULT_VALUE) {
-            Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity.getApplicationContext(), Constants.MESSAGE_ERROR, Toast.LENGTH_LONG).show();
             return;
         }
         mActivity.startActivity(getCastIntent(mActivity.getApplicationContext(), castId));

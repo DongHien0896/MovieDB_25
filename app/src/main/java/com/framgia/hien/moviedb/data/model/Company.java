@@ -17,7 +17,7 @@ public class Company implements Serializable {
     private String mName;
     @SerializedName("id")
     @Expose
-    private String mId;
+    private int mId;
     @SerializedName("logo_path")
     @Expose
     private String mLogoPath;
@@ -49,11 +49,11 @@ public class Company implements Serializable {
         mName = name;
     }
 
-    public String getId() {
+    public int getId() {
         return mId;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         mId = id;
     }
 

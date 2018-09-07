@@ -31,4 +31,5 @@
     <dimen name="dp_90">90dp</dimen>
     <dimen name="dp_240">240dp</dimen>
     <dimen name="dp_140">140dp</dimen>
+    <dimen name="dp_160">160dp</dimen>
 </resources>
