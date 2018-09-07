@@ -10,6 +10,7 @@ import com.example.dong.moviedb.R;
 import com.example.dong.moviedb.databinding.ActivityPersonBinding;
 import com.framgia.hien.moviedb.data.repository.MovieRepository;
 import com.framgia.hien.moviedb.data.repository.PersonRepository;
+import com.framgia.hien.moviedb.data.source.remote.MovieRemoteDataSource;
 import com.framgia.hien.moviedb.data.source.remote.PersonRemoteDataSource;
 import com.framgia.hien.moviedb.util.Constants;
 
@@ -30,12 +31,14 @@ public class PersonActivity extends AppCompatActivity implements PersonViewModel
 
     private void setViewModel() {
         PersonRepository personRepository = new PersonRepository(PersonRemoteDataSource.getInstance());
+        MovieRepository movieRepository = new MovieRepository(MovieRemoteDataSource.getInstance());
         int personId = getIntent().getIntExtra(Constants.PERSON, 0);
         mViewModel = new PersonViewModel(this, personId, personRepository);
         initView();
         mViewModel.setTextView(mTextOverview);
         mViewModel.setProgressBar(mProgressBar);
         mViewModel.setBackPress(this);
+        mViewModel.setRepository(movieRepository);
     }
 
     private void initView() {

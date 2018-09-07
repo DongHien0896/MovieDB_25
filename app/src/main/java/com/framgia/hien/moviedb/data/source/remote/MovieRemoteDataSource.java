@@ -1,7 +1,9 @@
 package com.framgia.hien.moviedb.data.source.remote;
 
 import com.framgia.hien.moviedb.data.model.Movie;
+import com.framgia.hien.moviedb.data.model.MovieByPerson;
 import com.framgia.hien.moviedb.data.model.MovieResponse;
+import com.framgia.hien.moviedb.data.model.ResultMovie;
 import com.framgia.hien.moviedb.data.source.remote.service.MovieApi;
 import com.framgia.hien.moviedb.data.source.remote.service.MovieServiceClient;
 import com.framgia.hien.moviedb.util.Constants;
@@ -75,12 +77,27 @@ public class MovieRemoteDataSource implements MovieDataSource.RemoteDataSource {
     }
 
     @Override
-    public Maybe<Movie> getDetailMovie(int movieId, String key) {
+    public Maybe<Movie> getDetailMovie(final int movieId, String key) {
         return mMovieApi.getDetailMovie(movieId, key)
                 .flatMap(new Function<Movie, SingleSource<? extends Movie>>() {
                     @Override
                     public SingleSource<? extends Movie> apply(Movie movie) throws Exception {
+                        System.out.println(movie.toString());
                         return Single.just(movie);
+                    }
+                })
+                .toMaybe();
+    }
+
+    @Override
+    public Maybe<List<ResultMovie>> getAllMovieByPerson(String key, String language, String query) {
+        return mMovieApi.getMovieByPerson(key, language, query)
+                .flatMap(new Function<MovieByPerson, SingleSource<? extends List<ResultMovie>>>() {
+                    @Override
+                    public SingleSource<? extends List<ResultMovie>> apply(MovieByPerson movieByPerson) throws Exception {
+                        System.out.println(movieByPerson.toString());
+                        MovieByPerson movieByPerson1 = movieByPerson;
+                        return Single.just(movieByPerson.getItems());
                     }
                 })
                 .toMaybe();

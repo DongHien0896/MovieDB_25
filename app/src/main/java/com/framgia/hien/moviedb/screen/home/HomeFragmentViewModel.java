@@ -173,8 +173,8 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
     }
 
     @Override
-    public void onItemClicked(Integer movieId) {
-        if (movieId == null) {
+    public void onItemClicked(int movieId) {
+        if (movieId == Constants.VALUE_INTEGER_NULL) {
             return;
         }
         Bundle bundle = new Bundle();

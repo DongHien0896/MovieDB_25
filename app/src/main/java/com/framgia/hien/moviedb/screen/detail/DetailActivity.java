@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.dong.moviedb.R;
 import com.example.dong.moviedb.databinding.ActivityDetailBinding;
-import com.framgia.hien.moviedb.data.repository.MovieRepository;
 import com.framgia.hien.moviedb.data.repository.CastRepository;
 import com.framgia.hien.moviedb.data.repository.MovieRepository;
 import com.framgia.hien.moviedb.data.source.remote.CastRemoteDataSource;
@@ -32,7 +31,19 @@ public class DetailActivity extends BaseActivity implements DetailViewModel.Back
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
+        initView();
         setComponent();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        MovieRepository movieRepository = MovieRepository.getInstance(MovieRemoteDataSource.getInstance());
+        CastRepository castRepository = CastRepository.getsInstance(CastRemoteDataSource.getInstance());
+        int movieId = intent.getIntExtra(Constants.ARGUMENT_MOVIE_ID, Constants.DEFAULT_VALUE);
+        setViewModel(movieRepository, castRepository, movieId);
+        mBinding.setViewModel(mViewModel);
+        mViewModel.onStart();
     }
 
     private void setComponent() {
@@ -40,7 +51,6 @@ public class DetailActivity extends BaseActivity implements DetailViewModel.Back
         CastRepository castRepository = CastRepository.getsInstance(CastRemoteDataSource.getInstance());
         Intent intent = getIntent();
         int movieId = intent.getIntExtra(Constants.ARGUMENT_MOVIE_ID, Constants.DEFAULT_VALUE);
-        initView();
         setViewModel(movieRepository, castRepository, movieId);
         mBinding.setViewModel(mViewModel);
     }
