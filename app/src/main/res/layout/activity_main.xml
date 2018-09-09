@@ -60,22 +60,6 @@
                     app:layout_constraintStart_toEndOf="@+id/image_toolbar_movie_icon"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/image_toolbar_search_icon"
-                    android:layout_width="@dimen/dp_48"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/dp_8"
-                    android:layout_marginLeft="@dimen/dp_320"
-                    android:layout_marginRight="@dimen/dp_16"
-                    android:layout_marginStart="@dimen/dp_320"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:src="@drawable/ic_search_white_24dp"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v7.widget.Toolbar>

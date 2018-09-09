@@ -34,6 +34,7 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
     private List<String> mKeyVideos = new ArrayList<>();
     public ObservableField<YouTubePlayer.OnInitializedListener> youtubeField;
     private YouTubePlayer mYouTubePlayer;
+    private PlayerStateChangeListener mChangeListener;
 
     public PlayViewModel(Movie movie, InterfaceBackClickListener listener) {
         movieObservableField.set(movie);
@@ -47,19 +48,26 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
         mTrailerAdapter = new TrailerAdapter();
         mTrailerAdapter.setItemTrailerClick(this);
         youtubeField = new ObservableField<>();
+        mChangeListener = new PlayerStateChangeListener();
     }
 
     private void playvideo(final String key) {
         youtubeField.set(new YouTubePlayer.OnInitializedListener() {
             @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                youTubePlayer.loadVideo(key);
-                mYouTubePlayer = youTubePlayer;
+            public void onInitializationSuccess(YouTubePlayer.Provider provider,
+                                                YouTubePlayer youTubePlayer, boolean wasRestored) {
                 mProgressBar.setVisibility(View.GONE);
+                mYouTubePlayer = youTubePlayer;
+                mYouTubePlayer.setPlayerStateChangeListener(mChangeListener);
+                if (wasRestored) {
+                    return;
+                }
+                youTubePlayer.loadVideo(key);
             }
 
             @Override
-            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+            public void onInitializationFailure(YouTubePlayer.Provider provider,
+                                                YouTubeInitializationResult youTubeInitializationResult) {
 
             }
         });
@@ -100,8 +108,8 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
         mCompositeDisposable.add(disposable);
     }
 
-    public void setKeyVideos(List<Trailer> trailers){
-        for (Trailer trailer : trailers){
+    public void setKeyVideos(List<Trailer> trailers) {
+        for (Trailer trailer : trailers) {
             mKeyVideos.add(trailer.getKey());
         }
         playvideo(mKeyVideos.get(0));
@@ -124,6 +132,33 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
     @Override
     protected void onStop() {
 
+    }
+
+    private final class PlayerStateChangeListener implements YouTubePlayer.PlayerStateChangeListener {
+        @Override
+        public void onLoading() {
+        }
+
+        @Override
+        public void onLoaded(String s) {
+            mYouTubePlayer.play();
+        }
+
+        @Override
+        public void onAdStarted() {
+        }
+
+        @Override
+        public void onVideoStarted() {
+        }
+
+        @Override
+        public void onVideoEnded() {
+        }
+
+        @Override
+        public void onError(YouTubePlayer.ErrorReason errorReason) {
+        }
     }
 
     interface InterfaceBackClickListener {

@@ -68,6 +68,6 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.ItemViewHo
     }
 
     public interface ItemClickListener {
-        void onItemGenreClicked(Integer genreId);
+        void onItemGenreClicked(Genre genre);
     }
 }

@@ -32,4 +32,7 @@
     <dimen name="dp_240">240dp</dimen>
     <dimen name="dp_140">140dp</dimen>
     <dimen name="dp_160">160dp</dimen>
+    <dimen name="dp_210">210dp</dimen>
+    <dimen name="dp_32">32dp</dimen>
+    <dimen name="dp_40">40dp</dimen>
 </resources>
