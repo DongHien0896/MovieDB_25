@@ -131,7 +131,6 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
 
     @Override
     protected void onStop() {
-
     }
 
     private final class PlayerStateChangeListener implements YouTubePlayer.PlayerStateChangeListener {
@@ -165,3 +164,4 @@ public class PlayViewModel extends BaseViewModel implements TrailerAdapter.ItemT
         void onBackImageClick();
     }
 }
+

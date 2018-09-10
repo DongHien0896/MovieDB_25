@@ -20,6 +20,7 @@ import com.framgia.hien.moviedb.screen.home.HomeFragment;
 import com.framgia.hien.moviedb.screen.home.HomeFragmentViewModel;
 import com.framgia.hien.moviedb.screen.search.SearchFragment;
 import com.framgia.hien.moviedb.util.network.NetworkReceiver;
+import java.util.zip.GZIPOutputStream;
 
 public class MainViewModel extends BaseViewModel implements BottomNavigationView.OnNavigationItemSelectedListener,
         SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener,
@@ -45,7 +46,7 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
 
     @Override
     protected void onStart() {
-        if (mNetworkReceiver == null){
+        if (mNetworkReceiver == null) {
             return;
         }
         mAppCompatActivity.registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager
@@ -54,7 +55,7 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
 
     @Override
     protected void onStop() {
-        if (mNetworkReceiver == null){
+        if (mNetworkReceiver == null) {
             return;
         }
         mAppCompatActivity.unregisterReceiver(mNetworkReceiver);
@@ -88,7 +89,6 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
     private void createComponent() {
         mHomeFragment = HomeFragment.getsInstance();
         mFavoriteFragment = FavoriteFragment.getsInstance();
-        mSearchFragment = SearchFragment.getInstance();
         addHideFragment(mFavoriteFragment);
         mFragmentManager.beginTransaction().add(R.id.frame_container, mHomeFragment).commit();
         mFragment = mHomeFragment;
@@ -106,7 +106,7 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
         mNetworkReceiver = new NetworkReceiver(listener);
     }
 
-    public void setMenuSearch(SearchView search, MenuItem menuItem){
+    public void setMenuSearch(SearchView search, MenuItem menuItem) {
         this.mSearchView = search;
         this.mSearchMenu = menuItem;
         mSearchView.setFocusableInTouchMode(true);
@@ -115,7 +115,7 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
         mHomeFragment.setClickGenreItem(this);
     }
 
-    public void setBottomNavigation(BottomNavigationView bottomNavigation){
+    public void setBottomNavigation(BottomNavigationView bottomNavigation) {
         this.mBottomNavigationView = bottomNavigation;
     }
 
@@ -160,6 +160,7 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
     @Override
     public boolean onMenuItemActionExpand(MenuItem menuItem) {
         mBottomNavigationView.setVisibility(View.GONE);
+        mSearchFragment = SearchFragment.getInstance();
         mFragmentManager.beginTransaction()
                 .add(R.id.frame_container, mSearchFragment)
                 .hide(mFragment)
@@ -177,10 +178,9 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
 
     @Override
     public void searchMoviesByGenre(Genre genre) {
-        mSearchView.setFocusableInTouchMode(false);
         mSearchMenu.expandActionView();
+        mSearchFragment.setGenre(genre);
         mSearchView.setQuery(genre.getName(), false);
         mSearchView.clearFocus();
-        mSearchFragment.setGenre(genre);
     }
 }
