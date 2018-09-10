@@ -40,4 +40,9 @@ public class MovieRepository implements MovieDataSource.RemoteDataSource {
     public Maybe<List<ResultMovie>> getAllMovieByPerson(String key, String language, String query) {
         return mRemoteDataSource.getAllMovieByPerson(key, language, query);
     }
+
+    @Override
+    public Maybe<List<Movie>> getAllMovieByCompany(int companyId, String key, String language) {
+        return mRemoteDataSource.getAllMovieByCompany(companyId, key, language);
+    }
 }

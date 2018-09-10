@@ -20,4 +20,6 @@
     <string name="tittle_date_realease">Realease</string>
     <string name="tittle_related_movies">Related movies</string>
     <string name="tittle_popular">Popular:</string>
+    <string name="tittle_headquater">Headquater:</string>
+    <string name="tittle_origin_country">Origin Country: </string>
 </resources>

@@ -102,4 +102,16 @@ public class MovieRemoteDataSource implements MovieDataSource.RemoteDataSource {
                 })
                 .toMaybe();
     }
+
+    @Override
+    public Maybe<List<Movie>> getAllMovieByCompany(int companyId, String key, String language) {
+        return mMovieApi.getMovieByCompany(companyId, key, language)
+                .flatMap(new Function<MovieResponse, SingleSource<? extends List<Movie>>>() {
+                    @Override
+                    public SingleSource<? extends List<Movie>> apply(MovieResponse movieResponse) throws Exception {
+                        return Single.just(movieResponse.getItems());
+                    }
+                })
+                .toMaybe();
+    }
 }

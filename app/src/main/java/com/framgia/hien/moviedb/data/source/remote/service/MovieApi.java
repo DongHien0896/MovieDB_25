@@ -49,5 +49,9 @@ public interface MovieApi {
     @GET("search/person")
     Single<MovieByPerson> getMovieByPerson(@Query("api_key") String key, @Query("language") String language
             , @Query("query") String querry);
+
+    @GET("company/{company_id}/movies")
+    Single<MovieResponse> getMovieByCompany(@Path("company_id") int companyId, @Query("api_key") String key,
+                                            @Query("language") String language);
 }
 

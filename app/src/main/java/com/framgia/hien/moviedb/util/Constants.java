@@ -18,6 +18,7 @@ public class Constants {
     public static final String COMPANY = "com.framgia.hien.moviedb.intent.company";
     public static final String LANGUAGE = "en-US";
     public static final int VALUE_INTEGER_NULL = 1;
+    public static final String MESSAGE_ERROR = "Error";
 
     private Constants() {
         // No-op
