@@ -22,4 +22,9 @@
     <string name="tittle_popular">Popular:</string>
     <string name="tittle_headquater">Headquater:</string>
     <string name="tittle_origin_country">Origin Country: </string>
+    <string name="tittle_favorite">List Favorite Movie:</string>
+    <string name="tittle_syn">Synchronize</string>
+    <string name="tittle_rate_app">Rate me</string>
+    <string name="tittle_info">Infomation of app</string>
+    <string name="tittle_help">Guide and help</string>
 </resources>

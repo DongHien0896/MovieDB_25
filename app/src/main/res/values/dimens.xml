@@ -35,4 +35,6 @@
     <dimen name="dp_210">210dp</dimen>
     <dimen name="dp_32">32dp</dimen>
     <dimen name="dp_40">40dp</dimen>
+    <dimen name="dp_60">60dp</dimen>
+    <dimen name="dp_21">21dp</dimen>
 </resources>
