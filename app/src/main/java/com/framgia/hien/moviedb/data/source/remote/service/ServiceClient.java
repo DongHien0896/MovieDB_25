@@ -11,7 +11,6 @@ import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -33,12 +32,10 @@ public class ServiceClient {
     static <T> T createService(Application application, String endPoint, Class<T> serviceClass,
                                @NonNull Gson gson, Interceptor interceptor) {
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-        int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        httpClientBuilder.cache(new Cache(application.getCacheDir(), cacheSize));
+
         if (interceptor != null) {
             httpClientBuilder.addInterceptor(interceptor);
         }
-
         httpClientBuilder.readTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
         httpClientBuilder.connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
         Retrofit.Builder builder = new Retrofit.Builder().baseUrl(endPoint)

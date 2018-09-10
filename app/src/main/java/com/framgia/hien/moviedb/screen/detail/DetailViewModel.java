@@ -192,13 +192,13 @@ public class DetailViewModel extends BaseViewModel implements CompanyAdapter.Ite
     }
 
     public void onFavoriteClicked(View view) {
-        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+        Toast.makeText(mActivity.getApplicationContext(), Constants.MESSAGE_REMOVE_FAVORITE, Toast.LENGTH_LONG).show();
         mImageUnFavorite.setVisibility(View.VISIBLE);
         mImageFavorite.setVisibility(View.GONE);
     }
 
     public void onUnFavoriteClicked(View view) {
-        Toast.makeText(mActivity.getApplicationContext(), Constants.TYPE_NOW_PLAYING, Toast.LENGTH_LONG).show();
+        Toast.makeText(mActivity.getApplicationContext(), Constants.MESSAGE_ADD_FAVORITE, Toast.LENGTH_LONG).show();
         mImageUnFavorite.setVisibility(View.GONE);
         mImageFavorite.setVisibility(View.VISIBLE);
     }

@@ -12,6 +12,8 @@ import android.widget.ProgressBar;
 import com.example.dong.moviedb.R;
 import com.example.dong.moviedb.databinding.FragmentSearchBinding;
 import com.framgia.hien.moviedb.data.model.Genre;
+import com.framgia.hien.moviedb.data.repository.MovieRepository;
+import com.framgia.hien.moviedb.data.source.remote.MovieRemoteDataSource;
 import com.framgia.hien.moviedb.screen.BaseFragment;
 
 public class SearchFragment extends BaseFragment {
@@ -19,36 +21,44 @@ public class SearchFragment extends BaseFragment {
     private FragmentSearchBinding mBinding;
     private SearchFragmentViewModel mViewModel;
     private ProgressBar mProgressBar;
-    private static SearchFragment sFragment;
+    private MovieRepository mMovieRepository;
+    private Genre mGenre;
 
     public static SearchFragment getInstance() {
-        if (sFragment == null) {
-            sFragment = new SearchFragment();
-        }
-        return sFragment;
+        return new SearchFragment();
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container
-            , @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false);
-
-        return super.onCreateView(inflater, container, savedInstanceState);
+        mMovieRepository = MovieRepository.getInstance(MovieRemoteDataSource.getInstance());
+        mViewModel = new SearchFragmentViewModel(getContext(), mMovieRepository);
+        mBinding.setViewModel(mViewModel);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel = new SearchFragmentViewModel();
+        iniView();
+        if (mGenre != null) {
+            mViewModel.setGenre(mGenre);
+        }
+        mViewModel.setProgressBar(mProgressBar);
+    }
+
+    private void iniView() {
+        mProgressBar = mBinding.progressIndicator;
     }
 
     public void searchForResult(String query) {
-        //show result search
+        mViewModel.setQuery(query);
     }
 
     public void setGenre(Genre genre) {
-        mViewModel.setGenre(genre);
+        this.mGenre = genre;
     }
 
     @Override
@@ -60,6 +70,7 @@ public class SearchFragment extends BaseFragment {
     @Override
     public void onStop() {
         mViewModel.onStop();
+
         super.onStop();
     }
 }

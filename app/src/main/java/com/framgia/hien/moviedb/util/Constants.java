@@ -19,6 +19,8 @@ public class Constants {
     public static final String LANGUAGE = "en-US";
     public static final int VALUE_INTEGER_NULL = 1;
     public static final String MESSAGE_ERROR = "Error";
+    public static final String MESSAGE_ADD_FAVORITE = "Added to favorite!";
+    public static final String MESSAGE_REMOVE_FAVORITE = "Removed to favorite!";
 
     private Constants() {
         // No-op
