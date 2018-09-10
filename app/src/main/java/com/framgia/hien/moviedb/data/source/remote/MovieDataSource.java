@@ -17,6 +17,10 @@ public interface MovieDataSource {
 
     Maybe<List<Movie>> getAllMovieByCompany(int companyId, String key, String language);
 
+    Maybe<List<Movie>> searchMovieByGenre(String key, int genreId, int page);
+
+    Maybe<List<Movie>> searchMovieByName(String key, String query, int page);
+
     interface RemoteDataSource extends MovieDataSource {
     }
 }

@@ -114,4 +114,27 @@ public class MovieRemoteDataSource implements MovieDataSource.RemoteDataSource {
                 })
                 .toMaybe();
     }
+
+    public Maybe<List<Movie>> searchMovieByGenre(String key, int genreId, int page) {
+        return mMovieApi.searchMovieByGenre(key, genreId, page)
+                .flatMap(new Function<MovieResponse, SingleSource<? extends List<Movie>>>() {
+                    @Override
+                    public SingleSource<? extends List<Movie>> apply(MovieResponse movieResponse) throws Exception {
+                        return Single.just(movieResponse.getItems());
+                    }
+                })
+                .toMaybe();
+    }
+
+    @Override
+    public Maybe<List<Movie>> searchMovieByName(String key, String query, int page) {
+        return mMovieApi.searchMovieByName(key, query, page)
+                .flatMap(new Function<MovieResponse, SingleSource<? extends List<Movie>>>() {
+                    @Override
+                    public SingleSource<? extends List<Movie>> apply(MovieResponse movieResponse) throws Exception {
+                        return Single.just(movieResponse.getItems());
+                    }
+                })
+                .toMaybe();
+    }
 }

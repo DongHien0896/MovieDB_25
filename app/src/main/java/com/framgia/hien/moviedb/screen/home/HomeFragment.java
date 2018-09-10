@@ -38,6 +38,10 @@ public class HomeFragment extends BaseFragment {
         return sInstance;
     }
 
+    public void setClickGenreItem(HomeFragmentViewModel.OnClickSearchMoviesByGenre clickGenreItem){
+        mViewModel.setOnClickItemGenres(clickGenreItem);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

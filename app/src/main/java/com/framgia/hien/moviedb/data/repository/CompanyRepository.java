@@ -10,7 +10,7 @@ public class CompanyRepository implements CompanyRemoteDataSource.RemoteDataSour
     private static CompanyRepository sInstance;
     private CompanyRemoteDataSource mRemoteDataSource;
 
-    private CompanyRepository(CompanyRemoteDataSource dataSource) {
+    public CompanyRepository(CompanyRemoteDataSource dataSource) {
         this.mRemoteDataSource = dataSource;
     }
 

@@ -46,6 +46,7 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
     private GenresAdapter mGenreAdapter;
     private Context mContext;
     private GenreRepository mGenreRepository;
+    private OnClickSearchMoviesByGenre mOnClickSearchMoviesByGenre;
 
     public HomeFragmentViewModel(FragmentManager fragmentManager, MovieRepository movieRepository,
                                  GenreRepository genreRepository, Context context) {
@@ -53,6 +54,10 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
         this.mMovieRepository = movieRepository;
         this.mGenreRepository = genreRepository;
         this.mContext = context;
+        setAdapter();
+    }
+
+    private void setAdapter() {
         mMoviePopularAdapter = new MovieAdapter();
         mMovieNowPlayingAdaper = new MovieAdapter();
         mMovieUpcomingAdapter = new MovieAdapter();
@@ -91,6 +96,10 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
 
     public void setSchedulerProvider(BaseScheduleProvider baseScheduleProvider) {
         this.mBaseScheduleProvider = baseScheduleProvider;
+    }
+
+    public void setOnClickItemGenres(OnClickSearchMoviesByGenre clickItemGenres){
+        this.mOnClickSearchMoviesByGenre = clickItemGenres;
     }
 
     private void requestGetMovies() {
@@ -185,7 +194,11 @@ public class HomeFragmentViewModel extends BaseViewModel implements MovieAdapter
     }
 
     @Override
-    public void onItemGenreClicked(Integer genreId) {
+    public void onItemGenreClicked(Genre genre) {
+        mOnClickSearchMoviesByGenre.searchMoviesByGenre(genre);
+    }
 
+    public interface OnClickSearchMoviesByGenre {
+        void searchMoviesByGenre(Genre genre);
     }
 }
