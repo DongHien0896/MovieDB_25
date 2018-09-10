@@ -1,12 +1,9 @@
 package com.framgia.hien.moviedb.screen.main;
 
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
@@ -19,8 +16,7 @@ import com.framgia.hien.moviedb.screen.favorite.FavoriteFragment;
 import com.framgia.hien.moviedb.screen.home.HomeFragment;
 import com.framgia.hien.moviedb.screen.home.HomeFragmentViewModel;
 import com.framgia.hien.moviedb.screen.search.SearchFragment;
-import com.framgia.hien.moviedb.util.network.NetworkReceiver;
-import java.util.zip.GZIPOutputStream;
+import com.framgia.hien.moviedb.screen.setting.SettingFragment;
 
 public class MainViewModel extends BaseViewModel implements BottomNavigationView.OnNavigationItemSelectedListener,
         SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener,
@@ -30,35 +26,24 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
     private HomeFragment mHomeFragment;
     private FavoriteFragment mFavoriteFragment;
     private FragmentManager mFragmentManager;
-    private NetworkReceiver mNetworkReceiver;
-    private AppCompatActivity mAppCompatActivity;
+    private SettingFragment mSettingFragment;
+
     private SearchView mSearchView;
     private MenuItem mSearchMenu;
     private SearchFragment mSearchFragment;
     private BottomNavigationView mBottomNavigationView;
 
     public MainViewModel(AppCompatActivity appCompatActivity) {
-        this.mAppCompatActivity = appCompatActivity;
         mFragmentManager = appCompatActivity.getSupportFragmentManager();
         createComponent();
-        checkInternet();
     }
 
     @Override
     protected void onStart() {
-        if (mNetworkReceiver == null) {
-            return;
-        }
-        mAppCompatActivity.registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager
-                .CONNECTIVITY_ACTION));
     }
 
     @Override
     protected void onStop() {
-        if (mNetworkReceiver == null) {
-            return;
-        }
-        mAppCompatActivity.unregisterReceiver(mNetworkReceiver);
     }
 
     @Override
@@ -76,6 +61,8 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
                 mSearchMenu.setVisible(false);
                 return true;
             case R.id.navigation_setting:
+                hideShowFragment(mFragment, mSettingFragment);
+                mFragment = mSettingFragment;
                 mSearchMenu.setVisible(false);
                 return true;
         }
@@ -89,6 +76,8 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
     private void createComponent() {
         mHomeFragment = HomeFragment.getsInstance();
         mFavoriteFragment = FavoriteFragment.getsInstance();
+        mSettingFragment = SettingFragment.getInstance();
+        addHideFragment(mSettingFragment);
         addHideFragment(mFavoriteFragment);
         mFragmentManager.beginTransaction().add(R.id.frame_container, mHomeFragment).commit();
         mFragment = mHomeFragment;
@@ -102,9 +91,6 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
         mFragmentManager.beginTransaction().hide(hide).show(show).commit();
     }
 
-    public void initNetworkBroadcastReceiver(NetworkReceiver.NetworkStateListener listener) {
-        mNetworkReceiver = new NetworkReceiver(listener);
-    }
 
     public void setMenuSearch(SearchView search, MenuItem menuItem) {
         this.mSearchView = search;
@@ -117,31 +103,6 @@ public class MainViewModel extends BaseViewModel implements BottomNavigationView
 
     public void setBottomNavigation(BottomNavigationView bottomNavigation) {
         this.mBottomNavigationView = bottomNavigation;
-    }
-
-    protected void showDialogNoInternet() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mAppCompatActivity.getApplicationContext());
-        builder.setTitle(mAppCompatActivity.getString(R.string.app_name));
-        builder.setMessage(mAppCompatActivity.getString(R.string.message_dialog_no_internet));
-        AlertDialog dialog = builder.create();
-        if (dialog.isShowing()) {
-            return;
-        }
-        dialog.show();
-    }
-
-    private void checkInternet() {
-        initNetworkBroadcastReceiver(new NetworkReceiver.NetworkStateListener() {
-            @Override
-            public void onNetworkConnected() {
-                createComponent();
-            }
-
-            @Override
-            public void onNetworkDisconnected() {
-                showDialogNoInternet();
-            }
-        });
     }
 
     @Override

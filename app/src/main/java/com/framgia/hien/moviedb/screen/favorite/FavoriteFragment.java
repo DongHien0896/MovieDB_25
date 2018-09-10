@@ -16,13 +16,14 @@ public class FavoriteFragment extends BaseFragment {
 
     private FragmentFavoriteBinding mBinding;
     private static FavoriteFragment sInstance;
+    private FavoriteFragmentViewModel mViewModel;
 
     public FavoriteFragment() {
 
     }
 
-    public static FavoriteFragment getsInstance(){
-        if (sInstance == null){
+    public static FavoriteFragment getsInstance() {
+        if (sInstance == null) {
             sInstance = new FavoriteFragment();
         }
         return sInstance;
@@ -30,9 +31,11 @@ public class FavoriteFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite, container, false);
         mBinding.setBinding(this);
+        mViewModel = new FavoriteFragmentViewModel();
         return mBinding.getRoot();
     }
 
